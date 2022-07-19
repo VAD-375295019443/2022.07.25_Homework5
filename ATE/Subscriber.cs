@@ -8,8 +8,10 @@ namespace ATE
 {
     internal class Subscriber : Client
     {
-        public string? PhoneNumber;
-        public bool PortStatus = false;
+        public int ContractNumber = 0;
+        public int PhoneNumber = 0;
+        public bool PortStatus = true; //Статус порта.
+        public bool PhoneCallStatus = false; //Статус дозвона.
 
         public Subscriber(string surname, string name, string middleName, DateOnly dateOfBirth) : base(surname, name, middleName, dateOfBirth)
         {
@@ -17,7 +19,7 @@ namespace ATE
 
         public delegate void Delegate ();
         public event Delegate? Event;
-        public void Put()
+        public void EventPhoneNumber()
         {
             if(Event != null)
             {
