@@ -9,16 +9,16 @@ namespace ATE
     internal class Magazine
     {
         int SubscriberNumber;
-        DateTime StartDateTime = DateTime.Now;
+        DateTime StartDateTime;
         TimeOnly CallDuration;
         double Money;
 
-        public Magazine(int subscriberNumber, DateTime startDateTime, TimeOnly callDuration, double money)
+        public Magazine(int SubscriberNumber, DateTime StartDateTime, TimeOnly CallDuration, double Money)
         {
-            SubscriberNumber = subscriberNumber;
-            StartDateTime = startDateTime;
-            CallDuration = callDuration;
-            Money = money;
+            this.SubscriberNumber = SubscriberNumber;
+            this.StartDateTime = StartDateTime;
+            this.CallDuration = CallDuration;
+            this.Money = Money;
         }
     }
 }

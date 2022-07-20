@@ -12,17 +12,17 @@ namespace ATE
         public string? Name;
         public int Price;
 
-        public TariffPlan(string? name, int price)
+        public TariffPlan(string? Name, int Price)
         {
-            Name = name;
-            Price = price;
+            this.Name = Name;
+            this.Price = Price;
         }
         
-        public TariffPlan(DateTime date, string? name, int price)
+        public TariffPlan(DateTime Date, string? Name, int Price)
         {
-            Date = date;
-            Name = name;
-            Price = price;
+            this.Date = Date;
+            this.Name = Name;
+            this.Price = Price;
         }
     }
 }

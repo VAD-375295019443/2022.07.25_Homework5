@@ -10,10 +10,6 @@ namespace ATE
         {
             ATE aTE = new ATE();
 
-            aTE.tariffPlan.Add(new TariffPlan("Light plan", 10));
-            aTE.tariffPlan.Add(new TariffPlan("Medium plan", 100));
-            aTE.tariffPlan.Add(new TariffPlan("Supper plan", 1000));
-
             while (true)
             {
                 Console.Clear();
@@ -21,15 +17,15 @@ namespace ATE
                 Console.WriteLine();
                 Console.WriteLine("Абоненты:");
 
-                if (aTE.subscriber.Count == 0)
+                if (aTE.Subscriber.Count == 0)
                 {
                     Console.WriteLine("Абоненты отсутствуют.");
                 }
                 else
                 {
-                    for (int int1 = 0; int1 <= aTE.subscriber.Count - 1; int1++)
+                    for (int int1 = 0; int1 <= aTE.Subscriber.Count - 1; int1++)
                     {
-                        Console.WriteLine($"{int1} - {aTE.subscriber[int1].Surname} {aTE.subscriber[int1].Name} {aTE.subscriber[int1].MiddleName}. Номер абонента: {aTE.subscriber[int1].PhoneNumber}");
+                        Console.WriteLine($"Номер абонента: {aTE.Subscriber[int1].PhoneNumber} - {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName}.");
 
                     }
                 }
@@ -60,10 +56,11 @@ namespace ATE
                     Console.WriteLine();
                     Console.WriteLine("Введите дату рождения:");
                     string? DateOfBirth = Console.ReadLine();
+                    Console.WriteLine();
 
-                    for (int int1 = 0; int1 <= aTE.tariffPlan.Count-1; int1++)
+                    for (int int1 = 0; int1 <= aTE.TariffPlan.Count-1; int1++)
                     {
-                        Console.WriteLine($"{int1}. {aTE.tariffPlan[int1].Name} {aTE.tariffPlan[int1].Price}.");
+                        Console.WriteLine($"{int1}. {aTE.TariffPlan[int1].Name} {aTE.TariffPlan[int1].Price}.");
                     }
                     
                     Console.WriteLine();
@@ -73,14 +70,37 @@ namespace ATE
 
                     if ((Surname != "" || Surname != null) && (Name != "" || Name != null) && (MiddleName != "" || MiddleName != null) && (DateOfBirth != "" || DateOfBirth != null) && boolControl != false)
                     {
-                        aTE.subscriber.Add(new Subscriber(Surname, Name, MiddleName, DateOnly.Parse(DateOfBirth), aTE.tariffPlan[NumberTariffPlan].Name, aTE.tariffPlan[NumberTariffPlan].Price));
+                        int PhoneNumber;
 
-                        aTE.subscriber[0].Event += CalcPhoneNumber;
-                        aTE.subscriber[0].EventPhoneNumber(aTE.subscriber);
-                        aTE.subscriber[0].Event -= CalcPhoneNumber;
+                        if (aTE.Subscriber.Count == 0)
+                        {
+                            PhoneNumber = 11111;
+                        }
+                        else
+                        {
+                            PhoneNumber = aTE.Subscriber.Max(z => z.PhoneNumber) + 1;
+
+                        }
+
+                        aTE.Subscriber.Add(new Subscriber(Surname, Name, MiddleName, DateOnly.Parse(DateOfBirth), PhoneNumber, aTE.TariffPlan[NumberTariffPlan].Name, aTE.TariffPlan[NumberTariffPlan].Price));
+                        
+                        Console.WriteLine($"Абонент с номером {PhoneNumber} успешно добавлен в базу данных.");
+                        Console.ReadLine();
+
+
+
+
+
+
+                        /*
+                        aTE.Subscriber[aTE.Subscriber.Count - 1].Event += CalcPhoneNumber;
+                        aTE.Subscriber[aTE.Subscriber.Count - 1].EventPhoneNumber(aTE.Subscriber);
+                        aTE.Subscriber[aTE.Subscriber.Count - 1].Event -= CalcPhoneNumber;
+                        */
                     }
                     else
                     {
+                        Console.WriteLine();
                         Console.WriteLine("Ввод не корректных данных! Нажмите Enter и повторите попытку.");
                         Console.ReadLine();
                             
@@ -97,7 +117,7 @@ namespace ATE
 
                     if (boolControl != false)
                     {
-                        aTE.subscriber.RemoveAt(NumberSubscriber);
+                        aTE.Subscriber.RemoveAt(NumberSubscriber);
                     }
                     else
                     {
@@ -130,21 +150,30 @@ namespace ATE
         }
 
 
-        public static void CalcPhoneNumber(List<Subscriber> subscriber)
+
+
+
+
+
+
+
+
+
+
+
+        public static void CalcPhoneNumber(List<Subscriber> Subscriber)
         {
             int MaxPhoneNumber;
 
-            if (subscriber.Count == 1)
+            if (Subscriber.Count == 0)
             {
-                MaxPhoneNumber = 1111111;
-                subscriber[0].PhoneNumber = MaxPhoneNumber;
-                subscriber[0].ContractNumber = MaxPhoneNumber;
+                MaxPhoneNumber = 11111;
+                Subscriber[0].PhoneNumber = MaxPhoneNumber;
             }
             else
             {
-                MaxPhoneNumber = subscriber.Max(x => x.PhoneNumber) + 1;
-                subscriber[subscriber.Count - 1].PhoneNumber = MaxPhoneNumber;
-                subscriber[subscriber.Count - 1].ContractNumber = MaxPhoneNumber;
+                MaxPhoneNumber = Subscriber.Max(x => x.PhoneNumber) + 1;
+                Subscriber[Subscriber.Count - 1].PhoneNumber = MaxPhoneNumber;
             }
 
             Console.WriteLine($"Абонент с номером {MaxPhoneNumber} успешно добавлен в базу данных.");

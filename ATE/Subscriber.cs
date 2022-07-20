@@ -8,25 +8,25 @@ namespace ATE
 {
     internal class Subscriber : Client
     {
-        public DateTime ContractDate;// = DateTime.Now;
-        public int ContractNumber;
         public int PhoneNumber;
+        public bool PortStatus;
+        public bool PhoneCallStatus;
+        public TariffPlan TariffPlan;
 
-        public TariffPlan tariffPlan;
-        
-        
-        //???
-        //public bool PortStatus = true; //Статус порта.
-        //public bool PhoneCallStatus = false; //Статус дозвона.
-
-
-        public Subscriber(string? surname, string? name, string? middleName, DateOnly dateOfBirth, string? tariffPlanName, int tariffPlanPrice) : base(surname, name, middleName, dateOfBirth)
+        public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int PhoneNumber, string? TariffPlanName, int TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
         {
-            ContractDate = DateTime.Now;
-            tariffPlan = new TariffPlan(DateTime.Now, tariffPlanName, tariffPlanPrice);
+            this.PhoneNumber = PhoneNumber;
+            PortStatus = true;
+            PhoneCallStatus = false; //Статус дозвона.
+
+            TariffPlan = new TariffPlan(DateTime.Now, TariffPlanName, TariffPlanPrice);
         }
 
 
+
+        
+
+        /*
         public delegate void Delegate (List<Subscriber> subscriber);
         public event Delegate? Event;
         public void EventPhoneNumber(List<Subscriber> subscriber)
@@ -36,5 +36,9 @@ namespace ATE
                 Event(subscriber);
             }
         }
+        */
+
+
+
     }
 }

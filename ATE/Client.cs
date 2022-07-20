@@ -11,14 +11,14 @@ namespace ATE
         public string? Surname;
         public string? Name;
         public string? MiddleName;
-        public DateOnly DateOfBirth = new DateOnly();
+        public DateOnly DateOfBirth;
 
-        public Client(string surname, string name, string middleName, DateOnly dateOfBirth)
+        public Client(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth)
         {
-            Surname = surname;
-            Name = name;
-            MiddleName = middleName;
-            DateOfBirth = dateOfBirth;
+            this.Surname = Surname;
+            this.Name = Name;
+            this.MiddleName = MiddleName;
+            this.DateOfBirth = DateOfBirth;
         }
     }
 }
