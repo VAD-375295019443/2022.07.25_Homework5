@@ -8,13 +8,21 @@ namespace ATE
 {
     internal class TariffPlan
     {
-        public DateOnly Date = new DateOnly();
-        public string? TariffPlanName;
-        public int Traffic;
+        public DateTime Date;
+        public string? Name;
+        public int Price;
 
-        public TariffPlan(string? tariffPlanName)
+        public TariffPlan(string? name, int price)
         {
-            TariffPlanName = tariffPlanName;
+            Name = name;
+            Price = price;
+        }
+        
+        public TariffPlan(DateTime date, string? name, int price)
+        {
+            Date = date;
+            Name = name;
+            Price = price;
         }
     }
 }
