@@ -24,5 +24,12 @@ namespace ATE
             this.Name = Name;
             this.Price = Price;
         }
+
+
+
+
+
+
+
     }
 }

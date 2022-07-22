@@ -13,7 +13,6 @@ namespace ATE
             while (true)
             {
                 Menu(aTE, 0);
-
                 string? strMenuNumber = Console.ReadLine();
 
                 if (strMenuNumber == "1")
@@ -117,23 +116,24 @@ namespace ATE
                         while (true)
                         {
                             Menu(aTE, 1, MyIndexSubscriber);
-
                             strMenuNumber = Console.ReadLine();
+
+
+                            //---------------------------------------------------------------------
+
+
 
                             if (strMenuNumber == "1")
                             {
-                                aTE.Subscriber[MyIndexSubscriber].PortStatus = true;
+                                aTE.Subscriber[MyIndexSubscriber].OnOff += CalcPortStatus;
+                                aTE.Subscriber[MyIndexSubscriber].CalcPortStatus();
+                                aTE.Subscriber[MyIndexSubscriber].OnOff -= CalcPortStatus;
                             }
                             else if (strMenuNumber == "2")
                             {
-                                aTE.Subscriber[MyIndexSubscriber].PortStatus = false;
+                                
                             }
                             else if (strMenuNumber == "3")
-                            {
-
-
-                            }
-                            else if (strMenuNumber == "4")
                             {
                                 if (aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date < aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date.AddMonths(1))
                                 {
@@ -167,12 +167,20 @@ namespace ATE
                                     Console.WriteLine("Нажмите Enter и повторите попытку.");
                                     Console.ReadLine();
                                 }
+
                             }
+                            else if (strMenuNumber == "4")
+                            {
+                                Console.WriteLine();
+                                Console.WriteLine("Введите сумму пополнения баланса:");
 
-
-
-
-
+                                if (double.TryParse(Console.ReadLine(), out double Many))
+                                {
+                                    aTE.Subscriber[MyIndexSubscriber].Balance.Add += CalcBalance;
+                                    aTE.Subscriber[MyIndexSubscriber].Balance.CalcBalance(Many);
+                                    aTE.Subscriber[MyIndexSubscriber].Balance.Add -= CalcBalance;
+                                }
+                            }
                             else if (strMenuNumber == "Exit" || strMenuNumber == "exit")
                             {
                                 break;
@@ -182,6 +190,11 @@ namespace ATE
 
 
                         }
+
+
+
+
+
                     }
                     else
                     {
@@ -201,23 +214,6 @@ namespace ATE
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -242,25 +238,31 @@ namespace ATE
 
                     for (int int1 = 0; int1 <= aTE.Subscriber.Count - 1; int1++)
                     {
-                        if (aTE.Subscriber[int1].PortStatus)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                        }
-                        else if (aTE.Subscriber[int1].PhoneCallStatus)
+                        if (aTE.Subscriber[int1].PhoneCallStatus)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
+                        else if (aTE.Subscriber[int1].PortStatus)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
                         else
                         {
-                            Console.ResetColor();
+                            Console.ForegroundColor = ConsoleColor.Blue;
                         }
-                        Console.WriteLine($"Ф.И.О: {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName} {aTE.Subscriber[int1].DateOfBirth}.");
+
+                        if (int1 > 0)
+                        {
+                            Console.WriteLine();
+                        }
                         Console.WriteLine($"Абонент: {aTE.Subscriber[int1].PhoneNumber}.");
+                        Console.WriteLine($"Ф.И.О: {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName} {aTE.Subscriber[int1].DateOfBirth}.");
+                        Console.WriteLine($"Баланс: {aTE.Subscriber[int1].Balance.Many}. Дата последнего пополнения: {aTE.Subscriber[int1].Balance.DateAdd}.");
                         Console.WriteLine($"Состояние порта: {aTE.Subscriber[int1].PortStatus}.");
                         Console.WriteLine($"Состояние соединения: {aTE.Subscriber[int1].PhoneCallStatus}.");
                         Console.WriteLine($"Тариф: {aTE.Subscriber[int1].TariffPlan.Name}. Цена: {aTE.Subscriber[int1].TariffPlan.Price}. Дата смены тарифа: {aTE.Subscriber[int1].TariffPlan.Date}.");
+                        Console.ResetColor();
                     }
-                    Console.ResetColor();
                 }
 
                 Console.WriteLine();
@@ -289,51 +291,72 @@ namespace ATE
                         continue;
                     }
 
-                    if (aTE.Subscriber[int1].PortStatus)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                    }
-                    else if (aTE.Subscriber[int1].PhoneCallStatus)
+                    if (aTE.Subscriber[int1].PhoneCallStatus)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
+                    else if (aTE.Subscriber[int1].PortStatus)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
                     else
                     {
-                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Blue;
                     }
-                    Console.WriteLine($"Абонент: {aTE.Subscriber[int1].PhoneNumber}. Порт: {aTE.Subscriber[int1].PortStatus}. Соединение: {aTE.Subscriber[int1].PhoneCallStatus} - {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName} {aTE.Subscriber[int1].DateOfBirth}.");
+
+                    if (MyIndexSubscriber == 0)
+                    {
+                        if (int1 >= 2)
+                        {
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        if (int1 >= 1)
+                        {
+                            Console.WriteLine();
+                        }
+                    }
+
+                    Console.WriteLine($"Абонент: {aTE.Subscriber[int1].PhoneNumber}.");
+                    Console.WriteLine($"Ф.И.О: {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName} {aTE.Subscriber[int1].DateOfBirth}.");
+                    Console.WriteLine($"Баланс: {aTE.Subscriber[int1].Balance.Many}. Дата последнего пополнения: {aTE.Subscriber[int1].Balance.DateAdd}.");
+                    Console.WriteLine($"Состояние порта: {aTE.Subscriber[int1].PortStatus}.");
+                    Console.WriteLine($"Состояние соединения: {aTE.Subscriber[int1].PhoneCallStatus}.");
+                    Console.WriteLine($"Тариф: {aTE.Subscriber[int1].TariffPlan.Name}. Цена: {aTE.Subscriber[int1].TariffPlan.Price}. Дата смены тарифа: {aTE.Subscriber[int1].TariffPlan.Date}.");
+                    Console.ResetColor();
                 }
-                Console.ResetColor();
 
                 Console.WriteLine();
                 Console.WriteLine("Ваш абонент:");
 
-                if (aTE.Subscriber[MyIndexSubscriber].PortStatus)
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                }
-                else if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus)
+                if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
+                else if (aTE.Subscriber[MyIndexSubscriber].PortStatus)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
                 else
                 {
-                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Blue;
                 }
-                Console.WriteLine($"Ф.И.О: {aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName} {aTE.Subscriber[MyIndexSubscriber].DateOfBirth}.");
                 Console.WriteLine($"Абонент: {aTE.Subscriber[MyIndexSubscriber].PhoneNumber}.");
+                Console.WriteLine($"Ф.И.О: {aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName} {aTE.Subscriber[MyIndexSubscriber].DateOfBirth}.");
+                Console.WriteLine($"Баланс: {aTE.Subscriber[MyIndexSubscriber].Balance.Many}. Дата последнего пополнения: {aTE.Subscriber[MyIndexSubscriber].Balance.DateAdd}.");
                 Console.WriteLine($"Состояние порта: {aTE.Subscriber[MyIndexSubscriber].PortStatus}.");
                 Console.WriteLine($"Состояние соединения: {aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus}.");
                 Console.WriteLine($"Тариф: {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Name}. Цена: {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price}. Дата смены тарифа: {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date}.");
-
                 Console.ResetColor();
 
                 Console.WriteLine();
                 Console.WriteLine("Введите номер пункта меню:");
-                Console.WriteLine("1 - Открытие порта.");
-                Console.WriteLine("2 - Закрытие порта.");
-                Console.WriteLine("3 - Звонок.");
-                Console.WriteLine("4 - Смена тарифного плана.");
+                Console.WriteLine("1 - Порт On/Off.");
+                Console.WriteLine("2 - Звонок On/Off.");
+                Console.WriteLine("3 - Смена тарифного плана.");
+                Console.WriteLine("4 - Пополнение баланса.");
                 Console.WriteLine("5 - Фильтр по дате звонков.");
                 Console.WriteLine("6 - Фильтр по продолжительности звонков.");
                 Console.WriteLine("7 - Фильтр по стоимости звонков.");
@@ -341,26 +364,6 @@ namespace ATE
                 Console.WriteLine("Exit - Выход в предыдущее меню.");
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-        aTE.Subscriber[aTE.Subscriber.Count - 1].Event += CalcPhoneNumber;
-        aTE.Subscriber[aTE.Subscriber.Count - 1].EventPhoneNumber(aTE.Subscriber);
-        aTE.Subscriber[aTE.Subscriber.Count - 1].Event -= CalcPhoneNumber;
-        */
 
 
 
@@ -385,9 +388,22 @@ namespace ATE
 
 
 
+        public static void CalcPortStatus(string Result)
+        {
+            Console.WriteLine();
+            Console.WriteLine(Result);
+            Console.WriteLine("Для продолжения нажмите Enter.");
+            Console.ReadLine();
+        }
 
 
 
-
+        public static void CalcBalance(string Result)
+        {
+            Console.WriteLine();
+            Console.WriteLine(Result);
+            Console.WriteLine("Для продолжения нажмите Enter.");
+            Console.ReadLine();
+        }
     }
 }

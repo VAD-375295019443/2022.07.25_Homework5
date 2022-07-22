@@ -12,33 +12,44 @@ namespace ATE
         public bool PortStatus;
         public bool PhoneCallStatus;
         public TariffPlan TariffPlan;
+        public Balance Balance;
 
         public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int PhoneNumber, string? TariffPlanName, int TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
         {
             this.PhoneNumber = PhoneNumber;
             PortStatus = true;
             PhoneCallStatus = false; //Статус дозвона.
-
             TariffPlan = new TariffPlan(DateTime.Now, TariffPlanName, TariffPlanPrice);
+            Balance = new Balance();
         }
 
 
-
-        
-
-        /*
-        public delegate void Delegate (List<Subscriber> subscriber);
-        public event Delegate? Event;
-        public void EventPhoneNumber(List<Subscriber> subscriber)
+        public delegate void PortOnOff(string Result);
+        public event PortOnOff? OnOff;
+        public void CalcPortStatus()
         {
-            if (Event != null)
+            string Result;
+
+            if (PortStatus == true)
             {
-                Event(subscriber);
+                PortStatus = false;
+
+                Result = $"Порт закрыт!";
+                if (OnOff != null)
+                {
+                    OnOff(Result);
+                }
+            }
+            else
+            {
+                PortStatus = true;
+
+                Result = $"Порт открыт!";
+                if (OnOff != null)
+                {
+                    OnOff(Result);
+                }
             }
         }
-        */
-
-
-
     }
 }
