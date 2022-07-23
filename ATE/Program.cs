@@ -118,16 +118,11 @@ namespace ATE
                             Menu(aTE, 1, MyIndexSubscriber);
                             strMenuNumber = Console.ReadLine();
 
-
-                            //---------------------------------------------------------------------
-
-
-
                             if (strMenuNumber == "1")
                             {
-                                aTE.Subscriber[MyIndexSubscriber].OnOff += CalcPortStatus;
+                                aTE.Subscriber[MyIndexSubscriber].OnOff += InfoPortStatus;
                                 aTE.Subscriber[MyIndexSubscriber].CalcPortStatus();
-                                aTE.Subscriber[MyIndexSubscriber].OnOff -= CalcPortStatus;
+                                aTE.Subscriber[MyIndexSubscriber].OnOff -= InfoPortStatus;
                             }
                             else if (strMenuNumber == "2")
                             {
@@ -135,39 +130,9 @@ namespace ATE
                             }
                             else if (strMenuNumber == "3")
                             {
-                                if (aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date < aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date.AddMonths(1))
-                                {
-                                    Console.WriteLine();
-                                    Console.WriteLine($"Вы сможете сменить тарифный план не ранеее чем {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date.AddMonths(1)}!");
-                                    Console.WriteLine("Для продолжения нажмите Enter.");
-                                    Console.ReadLine();
-                                    continue;
-                                }
-
-                                Console.WriteLine();
-                                for (int int1 = 0; int1 <= aTE.TariffPlan.Count - 1; int1++)
-                                {
-                                    Console.WriteLine($"{int1}. {aTE.TariffPlan[int1].Name} {aTE.TariffPlan[int1].Price}.");
-                                }
-
-                                Console.WriteLine();
-                                Console.WriteLine("Введите номер тарифного плана:");
-                                int NumberTariffPlan;
-
-                                if (Int32.TryParse(Console.ReadLine(), out NumberTariffPlan) && NumberTariffPlan >= 0 && NumberTariffPlan <= aTE.TariffPlan.Count - 1)
-                                {
-                                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date = DateTime.Now;
-                                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Name = aTE.TariffPlan[NumberTariffPlan].Name;
-                                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price = aTE.TariffPlan[NumberTariffPlan].Price;
-                                }
-                                else
-                                {
-                                    Console.WriteLine();
-                                    Console.WriteLine("Ввод не корректных данных!");
-                                    Console.WriteLine("Нажмите Enter и повторите попытку.");
-                                    Console.ReadLine();
-                                }
-
+                                aTE.Subscriber[MyIndexSubscriber].TariffPlan.Replace += CalcTariffPlanReplace;
+                                aTE.Subscriber[MyIndexSubscriber].TariffPlan.CalcTariffPlanReplace(aTE, MyIndexSubscriber);
+                                aTE.Subscriber[MyIndexSubscriber].TariffPlan.Replace -= CalcTariffPlanReplace;
                             }
                             else if (strMenuNumber == "4")
                             {
@@ -176,9 +141,9 @@ namespace ATE
 
                                 if (double.TryParse(Console.ReadLine(), out double Many))
                                 {
-                                    aTE.Subscriber[MyIndexSubscriber].Balance.Add += CalcBalance;
+                                    aTE.Subscriber[MyIndexSubscriber].Balance.Add += InfoBalance;
                                     aTE.Subscriber[MyIndexSubscriber].Balance.CalcBalance(Many);
-                                    aTE.Subscriber[MyIndexSubscriber].Balance.Add -= CalcBalance;
+                                    aTE.Subscriber[MyIndexSubscriber].Balance.Add -= InfoBalance;
                                 }
                             }
                             else if (strMenuNumber == "Exit" || strMenuNumber == "exit")
@@ -367,43 +332,73 @@ namespace ATE
 
 
 
-        public static void CalcPhoneNumber(List<Subscriber> Subscriber)
+        public static void InfoPortStatus(string Result)
         {
-            int MaxPhoneNumber;
+            Console.WriteLine();
+            Console.WriteLine(Result);
+            Console.WriteLine("Для продолжения нажмите Enter.");
+            Console.ReadLine();
+        }
 
-            if (Subscriber.Count == 0)
+
+
+        public static void InfoBalance(string Result)
+        {
+            Console.WriteLine();
+            Console.WriteLine(Result);
+            Console.WriteLine("Для продолжения нажмите Enter.");
+            Console.ReadLine();
+        }
+
+
+
+        public static void CalcTariffPlanReplace(ATE aTE, int MyIndexSubscriber)
+        {
+            if (aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date < aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date.AddMonths(1))
             {
-                MaxPhoneNumber = 11111;
-                Subscriber[0].PhoneNumber = MaxPhoneNumber;
+                Console.WriteLine();
+                Console.WriteLine($"Вы сможете сменить тарифный план не ранеее чем {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date.AddMonths(1)}!");
+                Console.WriteLine("Для продолжения нажмите Enter.");
+                Console.ReadLine();
             }
             else
             {
-                MaxPhoneNumber = Subscriber.Max(x => x.PhoneNumber) + 1;
-                Subscriber[Subscriber.Count - 1].PhoneNumber = MaxPhoneNumber;
+                Console.WriteLine();
+                for (int int1 = 0; int1 <= aTE.TariffPlan.Count - 1; int1++)
+                {
+                    Console.WriteLine($"{int1}. {aTE.TariffPlan[int1].Name} {aTE.TariffPlan[int1].Price}.");
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("Введите номер тарифного плана:");
+                int NumberTariffPlan;
+
+                if (Int32.TryParse(Console.ReadLine(), out NumberTariffPlan) && NumberTariffPlan >= 0 && NumberTariffPlan <= aTE.TariffPlan.Count - 1)
+                {
+                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date = DateTime.Now;
+                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Name = aTE.TariffPlan[NumberTariffPlan].Name;
+                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price = aTE.TariffPlan[NumberTariffPlan].Price;
+                }
+                else
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Ввод не корректных данных!");
+                    Console.WriteLine("Нажмите Enter и повторите попытку.");
+                    Console.ReadLine();
+                }
             }
-
-            Console.WriteLine($"Абонент с номером {MaxPhoneNumber} успешно добавлен в базу данных.");
-            Console.ReadLine();
         }
 
 
 
-        public static void CalcPortStatus(string Result)
-        {
-            Console.WriteLine();
-            Console.WriteLine(Result);
-            Console.WriteLine("Для продолжения нажмите Enter.");
-            Console.ReadLine();
-        }
 
 
 
-        public static void CalcBalance(string Result)
-        {
-            Console.WriteLine();
-            Console.WriteLine(Result);
-            Console.WriteLine("Для продолжения нажмите Enter.");
-            Console.ReadLine();
-        }
+
+
+
+
+
+
     }
 }
