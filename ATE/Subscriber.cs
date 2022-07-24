@@ -14,7 +14,7 @@ namespace ATE
         public TariffPlan TariffPlan;
         public Balance Balance;
 
-        public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int PhoneNumber, string? TariffPlanName, int TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
+        public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int PhoneNumber, string? TariffPlanName, double TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
         {
             PhoneCallStatus = new PhoneCallStatus();
             PortStatus = true;

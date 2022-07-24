@@ -8,17 +8,25 @@ namespace ATE
 {
     internal class Magazine
     {
-        int SubscriberNumber;
-        DateTime StartDateTime;
-        TimeOnly CallDuration;
-        double Money;
+        int MyNumberSubscriber;
+        string MyNameSubscriber;
+        int DialedNumberSubscriber;
+        string DialedNameSubscriber;
+        DateTime CallDateStart;
+        DateTime CallDateStop;
+        double Price;
+        double Cost;
 
-        public Magazine(int SubscriberNumber, DateTime StartDateTime, TimeOnly CallDuration, double Money)
+        public Magazine(int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, double Price, double Cost)
         {
-            this.SubscriberNumber = SubscriberNumber;
-            this.StartDateTime = StartDateTime;
-            this.CallDuration = CallDuration;
-            this.Money = Money;
+            this.MyNumberSubscriber = MyNumberSubscriber;
+            this.MyNameSubscriber = MyNameSubscriber;
+            this.DialedNumberSubscriber = DialedNumberSubscriber;
+            this.DialedNameSubscriber = DialedNameSubscriber;
+            this.CallDateStart = CallDateStart;
+            this.CallDateStop = CallDateStop;
+            this.Price = Price;
+            this.Cost = Cost;
         }
     }
 }

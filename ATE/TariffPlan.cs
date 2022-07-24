@@ -10,15 +10,15 @@ namespace ATE
     {
         public DateTime Date;
         public string? Name;
-        public int Price;
+        public double Price;
 
-        public TariffPlan(string? Name, int Price)
+        public TariffPlan(string? Name, double Price)
         {
             this.Name = Name;
             this.Price = Price;
         }
         
-        public TariffPlan(DateTime Date, string? Name, int Price)
+        public TariffPlan(DateTime Date, string? Name, double Price)
         {
             this.Date = Date;
             this.Name = Name;

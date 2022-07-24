@@ -10,7 +10,8 @@ namespace ATE
     {
         public bool CallStatus;
         public DateTime CallDateStart;
-        public int PhoneNumber;
+        public int DialedNumberSubscriber;
+        string DialedNameSubscriber;
 
         public PhoneCallStatus()
         {
@@ -18,43 +19,36 @@ namespace ATE
         }
 
 
-        public delegate void CallStatusOnOff(string Result);
-        public event CallStatusOnOff? OnOff;
-        public void CalcCallStatus(int PhoneNumber = (-1))
+        public delegate void CallStatusOn(string Result);
+        public event CallStatusOn? On;
+        public void CalcCallStatusOn(int DialedNumberSubscriber, string DialedNameSubscriber)
         {
             string Result;
-            DateTime CallDateStop;
 
-            if (CallStatus == true)
+            CallStatus = true;
+            CallDateStart = DateTime.Now;
+            this.DialedNumberSubscriber = DialedNumberSubscriber;
+            this.DialedNameSubscriber = DialedNameSubscriber;
+
+            Result = $"Соединение установлено!";
+            if (On != null)
             {
-                CallStatus = false;
-                CallDateStop = DateTime.Now;
-
-
-
-
-
-
-                Result = $"Соединение завершено!";
-                if (OnOff != null)
-                {
-                    OnOff(Result);
-                }
-            }
-            else
-            {
-                CallStatus = true;
-                CallDateStart = DateTime.Now;
-                this.PhoneNumber = PhoneNumber;
-
-                Result = $"Соединение установлено!";
-                if (OnOff != null)
-                {
-                    OnOff(Result);
-                }
+                On(Result);
             }
         }
 
 
+        public delegate void CallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, double Price, string Result);
+        public event CallStatusOff? Off;
+        public void CalcCallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, double Price)
+        {
+            string Result;
+
+            Result = $"Соединение завершено!";
+            if (Off != null)
+            {
+                Off(aTE, MyNumberSubscriber, MyNameSubscriber, DialedNumberSubscriber, DialedNameSubscriber, CallDateStart, DateTime.Now, Price, Result);
+            }
+        }
     }
 }

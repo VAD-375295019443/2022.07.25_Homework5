@@ -17,10 +17,10 @@ namespace ATE
             Subscriber = new List<Subscriber>();
             
             TariffPlan = new List<TariffPlan>();
-            TariffPlan.Add(new TariffPlan("Light plan", 1));
-            TariffPlan.Add(new TariffPlan("Medium plan", 10));
-            TariffPlan.Add(new TariffPlan("Supper plan", 100));
-            TariffPlan.Add(new TariffPlan("Supper Plus plan", 1000));
+            TariffPlan.Add(new TariffPlan("Light plan", 1.0));
+            TariffPlan.Add(new TariffPlan("Medium plan", 10.0));
+            TariffPlan.Add(new TariffPlan("Supper plan", 100.0));
+            TariffPlan.Add(new TariffPlan("Supper Plus plan", 1000.0));
 
             Magazine = new List<Magazine>();
         }

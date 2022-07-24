@@ -136,16 +136,22 @@ namespace ATE
                             {
                                 if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CallStatus == true)
                                 {
+                                    string MyNameSubscriber = $"{aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName}";
+
+                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.Off += InfoCallStatusOff;
+                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOff(aTE, MyNumberSubscriber, MyNameSubscriber, aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price);
+                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.Off -= InfoCallStatusOff;
 
 
 
+                                    
 
 
-                                    //1111111111111GGGggg!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    //Console.WriteLine();
-                                    //Console.WriteLine("Ваш телефон не подключен к сети! Измените статус порта.");
-                                    //Console.WriteLine("Для продолжения нажмите Enter.");
-                                    //Console.ReadLine();
+                                        //1111111111111GGGggg!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                        //Console.WriteLine();
+                                        //Console.WriteLine("hgjhhjghjgjgg.");
+                                        //Console.WriteLine("Для продолжения нажмите Enter.");
+                                        //Console.ReadLine();
                                     continue;
                                 }
                                 
@@ -191,20 +197,16 @@ namespace ATE
                                     continue;
                                 }
 
+                                string DialedNameSubscriber = $"{aTE.Subscriber[DialedIndexSubscriber].Surname} {aTE.Subscriber[DialedIndexSubscriber].Name} {aTE.Subscriber[DialedIndexSubscriber].MiddleName}";
 
-
-
-
-                                /////Теперь можно звонить
-
-
-
-
-
-
-
-
+                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.On += InfoCallStatusOn;
+                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOn(DialedNumberSubscriber, DialedNameSubscriber);
+                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.On -= InfoCallStatusOn;
                                 
+
+
+
+
 
 
 
@@ -435,6 +437,23 @@ namespace ATE
         }
 
 
+        public static void InfoCallStatusOn(string Result)
+        {
+            Console.WriteLine();
+            Console.WriteLine(Result);
+            Console.WriteLine("Для продолжения нажмите Enter.");
+            Console.ReadLine();
+        }
+
+
+        public static void InfoCallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, Double Price, string Result)
+        {
+            Console.WriteLine();
+            Console.WriteLine(Result);
+            Console.WriteLine("Для продолжения нажмите Enter.");
+            Console.ReadLine();
+        }
+
 
         public static void InfoBalance(string Result)
         {
@@ -443,7 +462,6 @@ namespace ATE
             Console.WriteLine("Для продолжения нажмите Enter.");
             Console.ReadLine();
         }
-
 
 
         public static void CalcTariffPlanReplace(ATE aTE, int MyIndexSubscriber)
@@ -482,7 +500,6 @@ namespace ATE
                 }
             }
         }
-
 
 
         public static void ErrorInfo()
