@@ -21,7 +21,7 @@ namespace ATE
 
         public delegate void CallStatusOn(int DialedNumberSubscriber, string DialedNameSubscriber);
         public event CallStatusOn? On;
-        public void CalcCallStatusOn(ATE aTE, int DialedIndexSubscriber)
+        public void CalcCallStatusOn(ref ATE aTE, int DialedIndexSubscriber)
         {
             CallStatus = true;
             CallDateStart = DateTime.Now;
@@ -56,9 +56,9 @@ namespace ATE
         }
 
 
-        public delegate void CallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, double Price);
+        public delegate void CallStatusOff(ref ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, double Price);
         public event CallStatusOff? Off;
-        public void CalcCallStatusOff(ATE aTE, int MyIndexSubscriber)
+        public void CalcCallStatusOff(ref ATE aTE, int MyIndexSubscriber)
         {
             CallStatus = false;
             
@@ -66,7 +66,7 @@ namespace ATE
 
             if (Off != null)
             {
-                Off(aTE,
+                Off(ref aTE,
                     aTE.Subscriber[MyIndexSubscriber].NumberSubscriber,
                     $"{aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName}",
                     DialedNumberSubscriber,

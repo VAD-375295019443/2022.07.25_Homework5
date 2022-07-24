@@ -8,17 +8,18 @@ namespace ATE
 {
     internal class Magazine
     {
-        int MyNumberSubscriber;
-        string MyNameSubscriber;
-        int DialedNumberSubscriber;
-        string DialedNameSubscriber;
-        DateTime CallDateStart;
-        DateTime CallDateStop;
-        TimeSpan CallDuration;
-        double Price;
-        double Cost;
-        private string result;
+        public int MyNumberSubscriber;
+        public string MyNameSubscriber;
+        public int DialedNumberSubscriber;
+        public string DialedNameSubscriber;
+        public DateTime CallDateStart;
+        public DateTime CallDateStop;
+        public TimeSpan CallDuration;
+        public double Price;
+        public double Cost;
 
+
+        
         public Magazine(int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, TimeSpan CallDuration, double Price, double Cost)
         {
             this.MyNumberSubscriber = MyNumberSubscriber;
@@ -31,5 +32,6 @@ namespace ATE
             this.Price = Price;
             this.Cost = Cost;
         }
+        
     }
 }

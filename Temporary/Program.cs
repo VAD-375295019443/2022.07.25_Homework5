@@ -14,21 +14,20 @@ namespace Temporary
         {
             DateTime d1 = DateTime.Now;
             DateTime d2 = d1.AddSeconds(120);
-            //DateTime d3 = d2 - d1;
 
-            TimeSpan z = d2 - d1;
+            int int1;
 
-            double s = z.TotalSeconds;
+            if(d1 > d2)
+            {
+                int1 = 12;
 
+            }
+            else
+            {
+                int1 = 1;
+            }
 
-            //int x = (int)z.TotalSeconds;
-
-            //int f = (int)(d2 - d1).TotalSeconds;
-
-
-
-
-            Console.WriteLine(z);
+            Console.WriteLine(int1);
             //Console.WriteLine(f);
 
 

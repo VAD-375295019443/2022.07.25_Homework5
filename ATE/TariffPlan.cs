@@ -26,13 +26,13 @@ namespace ATE
         }
 
 
-        public delegate void TariffPlanReplace(ATE aTE, int MyIndexSubscriber);
+        public delegate void TariffPlanReplace(ref ATE aTE, int MyIndexSubscriber);
         public event TariffPlanReplace? Replace;
         public void CalcTariffPlanReplace(ATE aTE, int MyIndexSubscriber)
         {
             if (Replace != null)
             {
-                Replace(aTE, MyIndexSubscriber);
+                Replace(ref aTE, MyIndexSubscriber);
             }
         }
     }

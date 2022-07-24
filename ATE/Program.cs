@@ -9,7 +9,7 @@ namespace ATE
         public static void Main(string[] args)
         {
             ATE aTE = new ATE();
-
+            
             while (true)
             {
                 Menu(aTE, 0);
@@ -32,7 +32,7 @@ namespace ATE
                     Console.WriteLine();
                     Console.WriteLine("Введите дату рождения:");
                     string? DateOfBirth = Console.ReadLine();
-                    
+
                     Console.WriteLine();
                     for (int int1 = 0; int1 <= aTE.TariffPlan.Count - 1; int1++)
                     {
@@ -116,11 +116,11 @@ namespace ATE
                                 if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CallStatus == true)
                                 {
                                     aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.Off += InfoCallStatusOff;
-                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOff(aTE, MyIndexSubscriber);
+                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOff(ref aTE, MyIndexSubscriber);
                                     aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.Off -= InfoCallStatusOff;
                                     continue;
                                 }
-                                
+
                                 if (aTE.Subscriber[MyIndexSubscriber].PortStatus == false)
                                 {
                                     Console.WriteLine();
@@ -129,7 +129,7 @@ namespace ATE
                                     Console.ReadLine();
                                     continue;
                                 }
-                                
+
                                 Console.WriteLine();
                                 Console.WriteLine("Введите номер абонента, которому вы воните:");
 
@@ -164,13 +164,13 @@ namespace ATE
                                 }
 
                                 aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.On += InfoCallStatusOn;
-                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOn(aTE, DialedIndexSubscriber);
+                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOn(ref aTE, DialedIndexSubscriber);
                                 aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.On -= InfoCallStatusOn;
                             }
                             else if (strMenuNumber == "3")
                             {
                                 aTE.Subscriber[MyIndexSubscriber].TariffPlan.Replace += CalcTariffPlanReplace;
-                                aTE.Subscriber[MyIndexSubscriber].TariffPlan.CalcTariffPlanReplace(aTE, MyIndexSubscriber);
+                                aTE.Subscriber[MyIndexSubscriber].TariffPlan.CalcTariffPlanReplace( aTE, MyIndexSubscriber);
                                 aTE.Subscriber[MyIndexSubscriber].TariffPlan.Replace -= CalcTariffPlanReplace;
                             }
                             else if (strMenuNumber == "4")
@@ -185,6 +185,10 @@ namespace ATE
                                     aTE.Subscriber[MyIndexSubscriber].Balance.Add -= InfoBalance;
                                 }
                             }
+                            else if (strMenuNumber == "5")
+                            {
+                                FilterCallData(aTE);
+                            }
                             else if (strMenuNumber == "Exit" || strMenuNumber == "exit")
                             {
                                 break;
@@ -193,12 +197,15 @@ namespace ATE
 
 
 
+
+
+                            
+
+
+
+
+
                         }
-
-
-
-
-
                     }
                     else
                     {
@@ -284,7 +291,7 @@ namespace ATE
                     Console.WriteLine("Абоненты:");
                     Console.WriteLine("Абоненты отсутствуют.");
                 }
-                
+
                 Console.WriteLine();
                 Console.WriteLine("Абоненты:");
 
@@ -388,7 +395,7 @@ namespace ATE
         }
 
 
-        public static void InfoCallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, Double Price)
+        public static void InfoCallStatusOff(ref ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, Double Price)
         {
             TimeSpan CallDuration = CallDateStop - CallDateStart;
             double SecondDifference = CallDuration.TotalSeconds;
@@ -416,7 +423,7 @@ namespace ATE
         }
 
 
-        public static void CalcTariffPlanReplace(ATE aTE, int MyIndexSubscriber)
+        public static void CalcTariffPlanReplace(ref ATE aTE, int MyIndexSubscriber)
         {
             if (aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date < aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date.AddMonths(1))
             {
@@ -467,5 +474,57 @@ namespace ATE
 
 
 
+        public static void FilterCallData(ATE aTE)
+        {
+            DateTime MinDate;
+            DateTime MaxDate;
+
+            Console.WriteLine();
+            Console.WriteLine("Введите минимальное значение даты:");
+            if (DateTime.TryParse(Console.ReadLine(), out MinDate) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Введите максимальное значение даты:");
+            if (DateTime.TryParse(Console.ReadLine(), out MaxDate) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+
+
+
+            var Result = aTE.Magazine.Where(x => x.CallDateStart >= MinDate && x.CallDateStart <= MaxDate.AddDays(1).AddSeconds(-1)).ToList();
+
+            
+            
+
+
+
+
+
+
+            for (int int1 = 0; int1 <= Result.Count - 1; int1++)
+            {
+                Console.WriteLine(Result[int1].MyNumberSubscriber);
+                Console.WriteLine(Result[int1].MyNameSubscriber);
+                Console.WriteLine(Result[int1].DialedNumberSubscriber);
+                Console.WriteLine(Result[int1].DialedNameSubscriber);
+                Console.WriteLine(Result[int1].CallDateStart);
+                Console.WriteLine(Result[int1].CallDateStop);
+                Console.WriteLine(Result[int1].CallDuration);
+                Console.WriteLine(Result[int1].Price);
+                Console.WriteLine(Result[int1].Cost);
+            }
+
+
+            Console.ReadLine();
+
+        }
     }
+        
 }
