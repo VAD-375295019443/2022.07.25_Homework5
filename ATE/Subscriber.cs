@@ -10,15 +10,14 @@ namespace ATE
     {
         public int PhoneNumber;
         public bool PortStatus;
-        public bool PhoneCallStatus;
+        public PhoneCallStatus PhoneCallStatus;
         public TariffPlan TariffPlan;
         public Balance Balance;
 
         public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int PhoneNumber, string? TariffPlanName, int TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
         {
-            this.PhoneNumber = PhoneNumber;
+            PhoneCallStatus = new PhoneCallStatus();
             PortStatus = true;
-            PhoneCallStatus = false; //Статус дозвона.
             TariffPlan = new TariffPlan(DateTime.Now, TariffPlanName, TariffPlanPrice);
             Balance = new Balance();
         }

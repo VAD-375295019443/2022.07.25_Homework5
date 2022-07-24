@@ -103,15 +103,15 @@ namespace ATE
 
                 else if (strMenuNumber == "3")
                 {
-                    int NumberSubscriber;
+                    int MyNumberSubscriber;
                     int MyIndexSubscriber;
 
                     Console.WriteLine();
                     Console.WriteLine("Введите номер вашего абонента:");
 
-                    if (Int32.TryParse(Console.ReadLine(), out NumberSubscriber) && aTE.Subscriber.Select(x => x.PhoneNumber).Contains(NumberSubscriber))
+                    if (Int32.TryParse(Console.ReadLine(), out MyNumberSubscriber) && aTE.Subscriber.Select(x => x.PhoneNumber).Contains(MyNumberSubscriber))
                     {
-                        MyIndexSubscriber = aTE.Subscriber.FindIndex(x => x.PhoneNumber == NumberSubscriber);
+                        MyIndexSubscriber = aTE.Subscriber.FindIndex(x => x.PhoneNumber == MyNumberSubscriber);
 
                         while (true)
                         {
@@ -124,9 +124,103 @@ namespace ATE
                                 aTE.Subscriber[MyIndexSubscriber].CalcPortStatus();
                                 aTE.Subscriber[MyIndexSubscriber].OnOff -= InfoPortStatus;
                             }
+                            
+
+
+
+
+
+
+
                             else if (strMenuNumber == "2")
                             {
+                                if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CallStatus == true)
+                                {
+
+
+
+
+
+                                    //1111111111111GGGggg!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    //Console.WriteLine();
+                                    //Console.WriteLine("Ваш телефон не подключен к сети! Измените статус порта.");
+                                    //Console.WriteLine("Для продолжения нажмите Enter.");
+                                    //Console.ReadLine();
+                                    continue;
+                                }
                                 
+                                if (aTE.Subscriber[MyIndexSubscriber].PortStatus == false)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Ваш телефон не подключен к сети! Измените статус порта.");
+                                    Console.WriteLine("Для продолжения нажмите Enter.");
+                                    Console.ReadLine();
+                                    continue;
+                                }
+                                
+                                Console.WriteLine();
+                                Console.WriteLine("Введите номер абонента, которому вы воните:");
+
+                                if (Int32.TryParse(Console.ReadLine(), out int DialedNumberSubscriber) == false)
+                                {
+                                    ErrorInfo(); continue;
+                                }
+
+                                if (MyNumberSubscriber == DialedNumberSubscriber || aTE.Subscriber.Select(x => x.PhoneNumber).Contains(DialedNumberSubscriber) == false)
+                                {
+                                    ErrorInfo(); continue;
+                                }
+
+                                int DialedIndexSubscriber = aTE.Subscriber.FindIndex(x => x.PhoneNumber == DialedNumberSubscriber);
+
+                                if (aTE.Subscriber[DialedIndexSubscriber].PhoneCallStatus.CallStatus == true)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Абонент, которому вы звоните, занят! Перезвоните позже.");
+                                    Console.WriteLine("Для продолжения нажмите Enter.");
+                                    Console.ReadLine();
+                                    continue;
+                                }
+
+                                if (aTE.Subscriber[DialedIndexSubscriber].PortStatus == false)
+                                {
+                                    Console.WriteLine();
+                                    Console.WriteLine("Телефон абонента, которому вы звоните не подключен к сети! Требуется изменить статус порта.");
+                                    Console.WriteLine("Для продолжения нажмите Enter.");
+                                    Console.ReadLine();
+                                    continue;
+                                }
+
+
+
+
+
+                                /////Теперь можно звонить
+
+
+
+
+
+
+
+
+                                
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             }
                             else if (strMenuNumber == "3")
                             {
@@ -203,7 +297,7 @@ namespace ATE
 
                     for (int int1 = 0; int1 <= aTE.Subscriber.Count - 1; int1++)
                     {
-                        if (aTE.Subscriber[int1].PhoneCallStatus)
+                        if (aTE.Subscriber[int1].PhoneCallStatus.CallStatus)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                         }
@@ -256,7 +350,7 @@ namespace ATE
                         continue;
                     }
 
-                    if (aTE.Subscriber[int1].PhoneCallStatus)
+                    if (aTE.Subscriber[int1].PhoneCallStatus.CallStatus)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
@@ -296,7 +390,7 @@ namespace ATE
                 Console.WriteLine();
                 Console.WriteLine("Ваш абонент:");
 
-                if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus)
+                if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CallStatus)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
@@ -391,8 +485,12 @@ namespace ATE
 
 
 
-
-
+        public static void ErrorInfo()
+        {
+            Console.WriteLine("Ввод не корректных данных!");
+            Console.WriteLine("Нажмите Enter и повторите попытку.");
+            Console.ReadLine();
+        }
 
 
 
