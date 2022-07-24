@@ -12,55 +12,29 @@ namespace Temporary
     {
         public static void Main(string[] args)
         {
-            
-            Ev z = new Ev();
+            DateTime d1 = DateTime.Now;
+            DateTime d2 = d1.AddSeconds(120);
+            //DateTime d3 = d2 - d1;
 
-            
-            
-            
-            z.Event += EventPhoneNumber;
-            z.EventPhoneNumber1(25);
-            z.Event -= EventPhoneNumber;
+            TimeSpan z = d2 - d1;
 
-            
+            double s = z.TotalSeconds;
+
+
+            //int x = (int)z.TotalSeconds;
+
+            //int f = (int)(d2 - d1).TotalSeconds;
+
+
+
+
+            Console.WriteLine(z);
+            //Console.WriteLine(f);
+
+
+
         }
-
-
-
-
-
-        //DateTime.Today.AddDays()
-
-        public static void EventPhoneNumber(int x)
-        {
-            
-
-            
-            /*
-            if (Subscriber.Count == 0)
-            {
-                MaxPhoneNumber = 11111;
-                Subscriber[0].PhoneNumber = MaxPhoneNumber;
-            }
-            else
-            {
-                MaxPhoneNumber = Subscriber.Max(x => x.PhoneNumber) + 1;
-                Subscriber[Subscriber.Count - 1].PhoneNumber = MaxPhoneNumber;
-            }
-            */
-
-            Console.WriteLine($"Абонент с номером успешно добавлен в базу данных.");
-
-            DateTime s = DateTime.Today.AddDays(-DateTime.Today.Day + 1);
-            Console.WriteLine(s);
-
-            Console.ReadLine();
-        }
-
-
-
     }
-
 }
 
 

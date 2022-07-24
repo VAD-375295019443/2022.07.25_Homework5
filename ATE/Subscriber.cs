@@ -8,16 +8,17 @@ namespace ATE
 {
     internal class Subscriber : Client
     {
-        public int PhoneNumber;
+        public int NumberSubscriber;
         public bool PortStatus;
         public PhoneCallStatus PhoneCallStatus;
         public TariffPlan TariffPlan;
         public Balance Balance;
 
-        public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int PhoneNumber, string? TariffPlanName, double TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
+        public Subscriber(string? Surname, string? Name, string? MiddleName, DateOnly DateOfBirth, int NumberSubscriber, string? TariffPlanName, double TariffPlanPrice) : base(Surname, Name, MiddleName, DateOfBirth)
         {
-            PhoneCallStatus = new PhoneCallStatus();
+            this.NumberSubscriber = NumberSubscriber;
             PortStatus = true;
+            PhoneCallStatus = new PhoneCallStatus();
             TariffPlan = new TariffPlan(DateTime.Now, TariffPlanName, TariffPlanPrice);
             Balance = new Balance();
         }

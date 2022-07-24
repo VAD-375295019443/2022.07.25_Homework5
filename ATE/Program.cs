@@ -45,21 +45,21 @@ namespace ATE
 
                     if (Surname != "" && Surname != null && Name != "" && Name != null && MiddleName != "" && MiddleName != null && DateOfBirth != "" && DateOfBirth != null && Int32.TryParse(Console.ReadLine(), out NumberTariffPlan) && NumberTariffPlan >= 0 && NumberTariffPlan <= aTE.TariffPlan.Count - 1)
                     {
-                        int PhoneNumber;
+                        int NumberSubscriber;
 
                         if (aTE.Subscriber.Count == 0)
                         {
-                            PhoneNumber = 11111;
+                            NumberSubscriber = 11111;
                         }
                         else
                         {
-                            PhoneNumber = aTE.Subscriber.Max(z => z.PhoneNumber) + 1;
+                            NumberSubscriber = aTE.Subscriber.Max(z => z.NumberSubscriber) + 1;
 
                         }
 
-                        aTE.Subscriber.Add(new Subscriber(Surname, Name, MiddleName, DateOnly.Parse(DateOfBirth), PhoneNumber, aTE.TariffPlan[NumberTariffPlan].Name, aTE.TariffPlan[NumberTariffPlan].Price));
+                        aTE.Subscriber.Add(new Subscriber(Surname, Name, MiddleName, DateOnly.Parse(DateOfBirth), NumberSubscriber, aTE.TariffPlan[NumberTariffPlan].Name, aTE.TariffPlan[NumberTariffPlan].Price));
 
-                        Console.WriteLine($"Абонент с номером {PhoneNumber} успешно добавлен в базу данных.");
+                        Console.WriteLine($"Абонент с номером {NumberSubscriber} успешно добавлен в базу данных.");
                         Console.WriteLine("Для продолжения нажмите Enter.");
                         Console.ReadLine();
                     }
@@ -71,20 +71,15 @@ namespace ATE
                         Console.ReadLine();
                     }
                 }
-
-
-
-
-
                 else if (strMenuNumber == "2")
                 {
                     int NumberSubscriber;
                     Console.WriteLine();
                     Console.WriteLine("Введите номер абонента:");
 
-                    if (Int32.TryParse(Console.ReadLine(), out NumberSubscriber) && aTE.Subscriber.Select(x => x.PhoneNumber).Contains(NumberSubscriber))
+                    if (Int32.TryParse(Console.ReadLine(), out NumberSubscriber) && aTE.Subscriber.Select(x => x.NumberSubscriber).Contains(NumberSubscriber))
                     {
-                        aTE.Subscriber.RemoveAll(x => x.PhoneNumber == NumberSubscriber);
+                        aTE.Subscriber.RemoveAll(x => x.NumberSubscriber == NumberSubscriber);
                     }
                     else
                     {
@@ -93,14 +88,6 @@ namespace ATE
                         Console.ReadLine();
                     }
                 }
-
-
-
-
-
-
-
-
                 else if (strMenuNumber == "3")
                 {
                     int MyNumberSubscriber;
@@ -109,9 +96,9 @@ namespace ATE
                     Console.WriteLine();
                     Console.WriteLine("Введите номер вашего абонента:");
 
-                    if (Int32.TryParse(Console.ReadLine(), out MyNumberSubscriber) && aTE.Subscriber.Select(x => x.PhoneNumber).Contains(MyNumberSubscriber))
+                    if (Int32.TryParse(Console.ReadLine(), out MyNumberSubscriber) && aTE.Subscriber.Select(x => x.NumberSubscriber).Contains(MyNumberSubscriber))
                     {
-                        MyIndexSubscriber = aTE.Subscriber.FindIndex(x => x.PhoneNumber == MyNumberSubscriber);
+                        MyIndexSubscriber = aTE.Subscriber.FindIndex(x => x.NumberSubscriber == MyNumberSubscriber);
 
                         while (true)
                         {
@@ -124,34 +111,13 @@ namespace ATE
                                 aTE.Subscriber[MyIndexSubscriber].CalcPortStatus();
                                 aTE.Subscriber[MyIndexSubscriber].OnOff -= InfoPortStatus;
                             }
-                            
-
-
-
-
-
-
-
                             else if (strMenuNumber == "2")
                             {
                                 if (aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CallStatus == true)
                                 {
-                                    string MyNameSubscriber = $"{aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName}";
-
                                     aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.Off += InfoCallStatusOff;
-                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOff(aTE, MyNumberSubscriber, MyNameSubscriber, aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price);
+                                    aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOff(aTE, MyIndexSubscriber);
                                     aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.Off -= InfoCallStatusOff;
-
-
-
-                                    
-
-
-                                        //1111111111111GGGggg!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                        //Console.WriteLine();
-                                        //Console.WriteLine("hgjhhjghjgjgg.");
-                                        //Console.WriteLine("Для продолжения нажмите Enter.");
-                                        //Console.ReadLine();
                                     continue;
                                 }
                                 
@@ -172,12 +138,12 @@ namespace ATE
                                     ErrorInfo(); continue;
                                 }
 
-                                if (MyNumberSubscriber == DialedNumberSubscriber || aTE.Subscriber.Select(x => x.PhoneNumber).Contains(DialedNumberSubscriber) == false)
+                                if (MyNumberSubscriber == DialedNumberSubscriber || aTE.Subscriber.Select(x => x.NumberSubscriber).Contains(DialedNumberSubscriber) == false)
                                 {
                                     ErrorInfo(); continue;
                                 }
 
-                                int DialedIndexSubscriber = aTE.Subscriber.FindIndex(x => x.PhoneNumber == DialedNumberSubscriber);
+                                int DialedIndexSubscriber = aTE.Subscriber.FindIndex(x => x.NumberSubscriber == DialedNumberSubscriber);
 
                                 if (aTE.Subscriber[DialedIndexSubscriber].PhoneCallStatus.CallStatus == true)
                                 {
@@ -197,32 +163,9 @@ namespace ATE
                                     continue;
                                 }
 
-                                string DialedNameSubscriber = $"{aTE.Subscriber[DialedIndexSubscriber].Surname} {aTE.Subscriber[DialedIndexSubscriber].Name} {aTE.Subscriber[DialedIndexSubscriber].MiddleName}";
-
                                 aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.On += InfoCallStatusOn;
-                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOn(DialedNumberSubscriber, DialedNameSubscriber);
+                                aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CalcCallStatusOn(aTE, DialedIndexSubscriber);
                                 aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.On -= InfoCallStatusOn;
-                                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             }
                             else if (strMenuNumber == "3")
                             {
@@ -316,11 +259,11 @@ namespace ATE
                         {
                             Console.WriteLine();
                         }
-                        Console.WriteLine($"Абонент: {aTE.Subscriber[int1].PhoneNumber}.");
+                        Console.WriteLine($"Абонент: {aTE.Subscriber[int1].NumberSubscriber}.");
                         Console.WriteLine($"Ф.И.О: {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName} {aTE.Subscriber[int1].DateOfBirth}.");
                         Console.WriteLine($"Баланс: {aTE.Subscriber[int1].Balance.Many}. Дата последнего пополнения: {aTE.Subscriber[int1].Balance.DateAdd}.");
                         Console.WriteLine($"Состояние порта: {aTE.Subscriber[int1].PortStatus}.");
-                        Console.WriteLine($"Состояние соединения: {aTE.Subscriber[int1].PhoneCallStatus}.");
+                        Console.WriteLine($"Состояние соединения: {aTE.Subscriber[int1].PhoneCallStatus.CallStatus}.");
                         Console.WriteLine($"Тариф: {aTE.Subscriber[int1].TariffPlan.Name}. Цена: {aTE.Subscriber[int1].TariffPlan.Price}. Дата смены тарифа: {aTE.Subscriber[int1].TariffPlan.Date}.");
                         Console.ResetColor();
                     }
@@ -380,11 +323,11 @@ namespace ATE
                         }
                     }
 
-                    Console.WriteLine($"Абонент: {aTE.Subscriber[int1].PhoneNumber}.");
+                    Console.WriteLine($"Абонент: {aTE.Subscriber[int1].NumberSubscriber}.");
                     Console.WriteLine($"Ф.И.О: {aTE.Subscriber[int1].Surname} {aTE.Subscriber[int1].Name} {aTE.Subscriber[int1].MiddleName} {aTE.Subscriber[int1].DateOfBirth}.");
                     Console.WriteLine($"Баланс: {aTE.Subscriber[int1].Balance.Many}. Дата последнего пополнения: {aTE.Subscriber[int1].Balance.DateAdd}.");
                     Console.WriteLine($"Состояние порта: {aTE.Subscriber[int1].PortStatus}.");
-                    Console.WriteLine($"Состояние соединения: {aTE.Subscriber[int1].PhoneCallStatus}.");
+                    Console.WriteLine($"Состояние соединения: {aTE.Subscriber[int1].PhoneCallStatus.CallStatus}.");
                     Console.WriteLine($"Тариф: {aTE.Subscriber[int1].TariffPlan.Name}. Цена: {aTE.Subscriber[int1].TariffPlan.Price}. Дата смены тарифа: {aTE.Subscriber[int1].TariffPlan.Date}.");
                     Console.ResetColor();
                 }
@@ -404,11 +347,11 @@ namespace ATE
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                 }
-                Console.WriteLine($"Абонент: {aTE.Subscriber[MyIndexSubscriber].PhoneNumber}.");
+                Console.WriteLine($"Абонент: {aTE.Subscriber[MyIndexSubscriber].NumberSubscriber}.");
                 Console.WriteLine($"Ф.И.О: {aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName} {aTE.Subscriber[MyIndexSubscriber].DateOfBirth}.");
                 Console.WriteLine($"Баланс: {aTE.Subscriber[MyIndexSubscriber].Balance.Many}. Дата последнего пополнения: {aTE.Subscriber[MyIndexSubscriber].Balance.DateAdd}.");
                 Console.WriteLine($"Состояние порта: {aTE.Subscriber[MyIndexSubscriber].PortStatus}.");
-                Console.WriteLine($"Состояние соединения: {aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus}.");
+                Console.WriteLine($"Состояние соединения: {aTE.Subscriber[MyIndexSubscriber].PhoneCallStatus.CallStatus}.");
                 Console.WriteLine($"Тариф: {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Name}. Цена: {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price}. Дата смены тарифа: {aTE.Subscriber[MyIndexSubscriber].TariffPlan.Date}.");
                 Console.ResetColor();
 
@@ -427,7 +370,6 @@ namespace ATE
         }
 
 
-
         public static void InfoPortStatus(string Result)
         {
             Console.WriteLine();
@@ -437,19 +379,29 @@ namespace ATE
         }
 
 
-        public static void InfoCallStatusOn(string Result)
+        public static void InfoCallStatusOn(int DialedNumberSubscriber, string DialedNameSubscriber)
         {
             Console.WriteLine();
-            Console.WriteLine(Result);
+            Console.WriteLine($"Соединение c абонентом {DialedNumberSubscriber} ({DialedNameSubscriber}) установлено!");
             Console.WriteLine("Для продолжения нажмите Enter.");
             Console.ReadLine();
         }
 
 
-        public static void InfoCallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, Double Price, string Result)
+        public static void InfoCallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, Double Price)
         {
+            TimeSpan CallDuration = CallDateStop - CallDateStart;
+            double SecondDifference = CallDuration.TotalSeconds;
+            int NumberOfSeconds = (int)SecondDifference;
+
+            double Cost = NumberOfSeconds * Price;
+
+            aTE.Magazine.Add(new Magazine(MyNumberSubscriber, MyNameSubscriber, DialedNumberSubscriber, DialedNameSubscriber, CallDateStart, CallDateStop, CallDuration, Price, Cost));
+
+            aTE.Subscriber[aTE.Subscriber.FindIndex(x => x.NumberSubscriber == MyNumberSubscriber)].Balance.Many -= Cost;
+
             Console.WriteLine();
-            Console.WriteLine(Result);
+            Console.WriteLine($"Соединение c абонентом {DialedNumberSubscriber} ({DialedNameSubscriber}) завершено! Длительность: {CallDuration}sec, стоимость: {Cost}.");
             Console.WriteLine("Для продолжения нажмите Enter.");
             Console.ReadLine();
         }

@@ -19,10 +19,27 @@ namespace ATE
         }
 
 
-        public delegate void CallStatusOn(string Result);
+        public delegate void CallStatusOn(int DialedNumberSubscriber, string DialedNameSubscriber);
         public event CallStatusOn? On;
-        public void CalcCallStatusOn(int DialedNumberSubscriber, string DialedNameSubscriber)
+        public void CalcCallStatusOn(ATE aTE, int DialedIndexSubscriber)
         {
+            CallStatus = true;
+            CallDateStart = DateTime.Now;
+            this.DialedNumberSubscriber = aTE.Subscriber[DialedIndexSubscriber].NumberSubscriber;
+            this.DialedNameSubscriber = $"{aTE.Subscriber[DialedIndexSubscriber].Surname} {aTE.Subscriber[DialedIndexSubscriber].Name} {aTE.Subscriber[DialedIndexSubscriber].MiddleName}";
+
+            aTE.Subscriber[DialedIndexSubscriber].PhoneCallStatus.CallStatus = true;
+
+            if (On != null)
+            {
+                On(DialedNumberSubscriber, DialedNameSubscriber);
+            }
+
+
+
+
+
+            /*
             string Result;
 
             CallStatus = true;
@@ -35,19 +52,28 @@ namespace ATE
             {
                 On(Result);
             }
+            */
         }
 
 
-        public delegate void CallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, double Price, string Result);
+        public delegate void CallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, double Price);
         public event CallStatusOff? Off;
-        public void CalcCallStatusOff(ATE aTE, int MyNumberSubscriber, string MyNameSubscriber, double Price)
+        public void CalcCallStatusOff(ATE aTE, int MyIndexSubscriber)
         {
-            string Result;
+            CallStatus = false;
+            
+            aTE.Subscriber[aTE.Subscriber.FindIndex(x => x.NumberSubscriber == DialedNumberSubscriber)].PhoneCallStatus.CallStatus = false;
 
-            Result = $"Соединение завершено!";
             if (Off != null)
             {
-                Off(aTE, MyNumberSubscriber, MyNameSubscriber, DialedNumberSubscriber, DialedNameSubscriber, CallDateStart, DateTime.Now, Price, Result);
+                Off(aTE,
+                    aTE.Subscriber[MyIndexSubscriber].NumberSubscriber,
+                    $"{aTE.Subscriber[MyIndexSubscriber].Surname} {aTE.Subscriber[MyIndexSubscriber].Name} {aTE.Subscriber[MyIndexSubscriber].MiddleName}",
+                    DialedNumberSubscriber,
+                    DialedNameSubscriber,
+                    CallDateStart,
+                    DateTime.Now,
+                    aTE.Subscriber[MyIndexSubscriber].TariffPlan.Price);
             }
         }
     }
