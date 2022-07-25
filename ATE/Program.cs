@@ -9,7 +9,8 @@ namespace ATE
         public static void Main(string[] args)
         {
             ATE aTE = new ATE();
-            
+            ReadMagazineFromFile(ref aTE);
+
             while (true)
             {
                 Menu(aTE, 0);
@@ -184,40 +185,28 @@ namespace ATE
                             {
                                 FilterCallData(aTE);
                             }
-                            else if (strMenuNumber == "5")
+                            else if (strMenuNumber == "6")
                             {
-                                
+                                FilterNumberOfSeconds(aTE);
                             }
-
-
-
-
-
-
+                            else if (strMenuNumber == "7")
+                            {
+                                FilterCost(aTE);
+                            }
+                            else if (strMenuNumber == "8")
+                            {
+                                FilterMyNumberSubscriber(aTE);
+                            }
                             else if (strMenuNumber == "Exit" || strMenuNumber == "exit")
                             {
                                 break;
                             }
-
-
-
-
-
-
-                            
-
-
-
-
-
                         }
                     }
                     else
                     {
                         ErrorInfo();
                     }
-
-
                 }
                 else if (strMenuNumber == "Exit" || strMenuNumber == "exit")
                 {
@@ -416,6 +405,8 @@ namespace ATE
 
             aTE.Subscriber[aTE.Subscriber.FindIndex(x => x.NumberSubscriber == MyNumberSubscriber)].Balance.Many -= Cost;
 
+            WriteMagazineInFile(aTE);
+
             Console.WriteLine();
             Console.WriteLine($"Соединение c абонентом {DialedNumberSubscriber} ({DialedNameSubscriber}) завершено! Длительность: {NumberOfSeconds}sec, стоимость: {Cost}.");
             Console.WriteLine("Для продолжения нажмите Enter.");
@@ -467,46 +458,6 @@ namespace ATE
                     Console.ReadLine();
                 }
             }
-        }
-
-
-        public static void FilterMyNumberSubscriber(ATE aTE)
-        {
-            int Min;
-            int Max;
-
-            Console.WriteLine();
-            Console.WriteLine("Введите минимальное значение номера абонента:");
-            if (Int32.TryParse(Console.ReadLine(), out Min) == false)
-            {
-                ErrorInfo();
-                return;
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("Введите максимальное значение номера абонента:");
-            if (Int32.TryParse(Console.ReadLine(), out Max) == false)
-            {
-                ErrorInfo();
-                return;
-            }
-
-            var ResultOfFilter = aTE.Magazine.Where(x => x.MyNumberSubscriber >= Min && x.MyNumberSubscriber <= Max).ToList();
-
-            for (int int1 = 0; int1 <= ResultOfFilter.Count - 1; int1++)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"Абонент 1: {ResultOfFilter[int1].MyNumberSubscriber}");
-                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].MyNameSubscriber}");
-                Console.WriteLine($"Абонент 2: {ResultOfFilter[int1].DialedNumberSubscriber}");
-                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].DialedNameSubscriber}");
-                Console.WriteLine($"Дата начала звонка: {ResultOfFilter[int1].CallDateStart}");
-                Console.WriteLine($"Дата окончания звонка: {ResultOfFilter[int1].CallDateStop}");
-                Console.WriteLine($"Длительность звонка: {ResultOfFilter[int1].NumberOfSeconds}");
-                Console.WriteLine($"Цена: {ResultOfFilter[int1].Price}");
-                Console.WriteLine($"Стоимость: {ResultOfFilter[int1].Cost}");
-            }
-            Console.ReadLine();
         }
         
         
@@ -630,7 +581,103 @@ namespace ATE
         }
 
 
-        public static void WriteInFile(ATE aTE)
+        public static void FilterMyNumberSubscriber(ATE aTE)
+        {
+            int Min;
+            int Max;
+
+            Console.WriteLine();
+            Console.WriteLine("Введите минимальное значение номера абонента:");
+            if (Int32.TryParse(Console.ReadLine(), out Min) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Введите максимальное значение номера абонента:");
+            if (Int32.TryParse(Console.ReadLine(), out Max) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            var ResultOfFilter = aTE.Magazine.Where(x => x.MyNumberSubscriber >= Min && x.MyNumberSubscriber <= Max).ToList();
+
+            for (int int1 = 0; int1 <= ResultOfFilter.Count - 1; int1++)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Абонент 1: {ResultOfFilter[int1].MyNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].MyNameSubscriber}");
+                Console.WriteLine($"Абонент 2: {ResultOfFilter[int1].DialedNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].DialedNameSubscriber}");
+                Console.WriteLine($"Дата начала звонка: {ResultOfFilter[int1].CallDateStart}");
+                Console.WriteLine($"Дата окончания звонка: {ResultOfFilter[int1].CallDateStop}");
+                Console.WriteLine($"Длительность звонка: {ResultOfFilter[int1].NumberOfSeconds}");
+                Console.WriteLine($"Цена: {ResultOfFilter[int1].Price}");
+                Console.WriteLine($"Стоимость: {ResultOfFilter[int1].Cost}");
+            }
+            Console.ReadLine();
+        }
+        
+        
+        public static void ReadMagazineFromFile(ref ATE aTE)
+        {
+            string Path = @"d:\Automatic telephone exchange";
+
+            if (Directory.Exists(Path) == false) //Если директория не существует.
+            {
+                Directory.CreateDirectory(Path); //Создаем.
+            }
+            else
+            {
+                Path = $@"d:\Automatic telephone exchange\Magazine.txt";
+                
+                string[] MagazineFromFile = new string[0];
+
+                int MyNumberSubscriber;
+                string MyNameSubscriber;
+                int DialedNumberSubscriber;
+                string DialedNameSubscriber;
+                DateTime CallDateStart;
+                DateTime CallDateStop;
+                int NumberOfSeconds;
+                double Price;
+                double Cost;
+                    
+                if (File.Exists(Path) == true) //Если файл существует.
+                {
+                    Array.Resize(ref MagazineFromFile, 0);
+                    MagazineFromFile = File.ReadAllLines(Path);
+
+                    for (int int1 = 0; int1 <= MagazineFromFile.Length-1; int1++)
+                    {
+                        MyNumberSubscriber = Convert.ToInt32(MagazineFromFile[int1]);
+                        int1++;
+                        MyNameSubscriber = MagazineFromFile[int1];
+                        int1++;
+                        DialedNumberSubscriber = Convert.ToInt32(MagazineFromFile[int1]);
+                        int1++; 
+                        DialedNameSubscriber = MagazineFromFile[int1];
+                        int1++;
+                        CallDateStart = Convert.ToDateTime(MagazineFromFile[int1]);
+                        int1++;
+                        CallDateStop = Convert.ToDateTime(MagazineFromFile[int1]);
+                        int1++;
+                        NumberOfSeconds = Convert.ToInt32(MagazineFromFile[int1]);
+                        int1++;
+                        Price = Convert.ToDouble(MagazineFromFile[int1]);
+                        int1++;
+                        Cost = Convert.ToDouble(MagazineFromFile[int1]);
+
+                        aTE.Magazine.Add(new Magazine(MyNumberSubscriber, MyNameSubscriber, DialedNumberSubscriber, DialedNameSubscriber, CallDateStart, CallDateStop, NumberOfSeconds, Price, Cost));
+                    }
+                }
+            }
+        }
+        
+        
+        public static void WriteMagazineInFile(ATE aTE)
         {
             string Path = @"d:\Automatic telephone exchange";
 

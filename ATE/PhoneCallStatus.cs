@@ -34,25 +34,6 @@ namespace ATE
             {
                 On(DialedNumberSubscriber, DialedNameSubscriber);
             }
-
-
-
-
-
-            /*
-            string Result;
-
-            CallStatus = true;
-            CallDateStart = DateTime.Now;
-            this.DialedNumberSubscriber = DialedNumberSubscriber;
-            this.DialedNameSubscriber = DialedNameSubscriber;
-
-            Result = $"Соединение установлено!";
-            if (On != null)
-            {
-                On(Result);
-            }
-            */
         }
 
 
