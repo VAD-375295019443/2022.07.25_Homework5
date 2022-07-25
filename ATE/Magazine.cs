@@ -14,13 +14,13 @@ namespace ATE
         public string DialedNameSubscriber;
         public DateTime CallDateStart;
         public DateTime CallDateStop;
-        public TimeSpan CallDuration;
+        public int NumberOfSeconds;
         public double Price;
         public double Cost;
 
 
         
-        public Magazine(int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, TimeSpan CallDuration, double Price, double Cost)
+        public Magazine(int MyNumberSubscriber, string MyNameSubscriber, int DialedNumberSubscriber, string DialedNameSubscriber, DateTime CallDateStart, DateTime CallDateStop, int NumberOfSeconds, double Price, double Cost)
         {
             this.MyNumberSubscriber = MyNumberSubscriber;
             this.MyNameSubscriber = MyNameSubscriber;
@@ -28,7 +28,7 @@ namespace ATE
             this.DialedNameSubscriber = DialedNameSubscriber;
             this.CallDateStart = CallDateStart;
             this.CallDateStop = CallDateStop;
-            this.CallDuration = CallDuration;
+            this.NumberOfSeconds = NumberOfSeconds;
             this.Price = Price;
             this.Cost = Cost;
         }

@@ -65,10 +65,7 @@ namespace ATE
                     }
                     else
                     {
-                        Console.WriteLine();
-                        Console.WriteLine("Ввод не корректных данных!");
-                        Console.WriteLine("Нажмите Enter и повторите попытку.");
-                        Console.ReadLine();
+                        ErrorInfo();
                     }
                 }
                 else if (strMenuNumber == "2")
@@ -83,9 +80,7 @@ namespace ATE
                     }
                     else
                     {
-                        Console.WriteLine("Ввод не корректных данных!");
-                        Console.WriteLine("Нажмите Enter и повторите попытку.");
-                        Console.ReadLine();
+                        ErrorInfo();
                     }
                 }
                 else if (strMenuNumber == "3")
@@ -131,7 +126,7 @@ namespace ATE
                                 }
 
                                 Console.WriteLine();
-                                Console.WriteLine("Введите номер абонента, которому вы воните:");
+                                Console.WriteLine("Введите номер набираемого абонента:");
 
                                 if (Int32.TryParse(Console.ReadLine(), out int DialedNumberSubscriber) == false)
                                 {
@@ -189,6 +184,16 @@ namespace ATE
                             {
                                 FilterCallData(aTE);
                             }
+                            else if (strMenuNumber == "5")
+                            {
+                                
+                            }
+
+
+
+
+
+
                             else if (strMenuNumber == "Exit" || strMenuNumber == "exit")
                             {
                                 break;
@@ -209,10 +214,7 @@ namespace ATE
                     }
                     else
                     {
-                        Console.ReadLine();
-                        Console.WriteLine("Ввод не корректных данных!");
-                        Console.WriteLine("Нажмите Enter и повторите попытку.");
-                        Console.ReadLine();
+                        ErrorInfo();
                     }
 
 
@@ -226,9 +228,7 @@ namespace ATE
             }
         }
 
-
-
-
+        
         public static void Menu(ATE aTE, ushort Index, int MyIndexSubscriber = (-1))
         {
             Console.Clear();
@@ -377,6 +377,15 @@ namespace ATE
         }
 
 
+        public static void ErrorInfo()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Ввод не корректных данных!");
+            Console.WriteLine("Нажмите Enter и повторите попытку.");
+            Console.ReadLine();
+        }
+
+
         public static void InfoPortStatus(string Result)
         {
             Console.WriteLine();
@@ -403,12 +412,12 @@ namespace ATE
 
             double Cost = NumberOfSeconds * Price;
 
-            aTE.Magazine.Add(new Magazine(MyNumberSubscriber, MyNameSubscriber, DialedNumberSubscriber, DialedNameSubscriber, CallDateStart, CallDateStop, CallDuration, Price, Cost));
+            aTE.Magazine.Add(new Magazine(MyNumberSubscriber, MyNameSubscriber, DialedNumberSubscriber, DialedNameSubscriber, CallDateStart, CallDateStop, NumberOfSeconds, Price, Cost));
 
             aTE.Subscriber[aTE.Subscriber.FindIndex(x => x.NumberSubscriber == MyNumberSubscriber)].Balance.Many -= Cost;
 
             Console.WriteLine();
-            Console.WriteLine($"Соединение c абонентом {DialedNumberSubscriber} ({DialedNameSubscriber}) завершено! Длительность: {CallDuration}sec, стоимость: {Cost}.");
+            Console.WriteLine($"Соединение c абонентом {DialedNumberSubscriber} ({DialedNameSubscriber}) завершено! Длительность: {NumberOfSeconds}sec, стоимость: {Cost}.");
             Console.WriteLine("Для продолжения нажмите Enter.");
             Console.ReadLine();
         }
@@ -461,19 +470,46 @@ namespace ATE
         }
 
 
-        public static void ErrorInfo()
+        public static void FilterMyNumberSubscriber(ATE aTE)
         {
-            Console.WriteLine("Ввод не корректных данных!");
-            Console.WriteLine("Нажмите Enter и повторите попытку.");
+            int Min;
+            int Max;
+
+            Console.WriteLine();
+            Console.WriteLine("Введите минимальное значение номера абонента:");
+            if (Int32.TryParse(Console.ReadLine(), out Min) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Введите максимальное значение номера абонента:");
+            if (Int32.TryParse(Console.ReadLine(), out Max) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            var ResultOfFilter = aTE.Magazine.Where(x => x.MyNumberSubscriber >= Min && x.MyNumberSubscriber <= Max).ToList();
+
+            for (int int1 = 0; int1 <= ResultOfFilter.Count - 1; int1++)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Абонент 1: {ResultOfFilter[int1].MyNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].MyNameSubscriber}");
+                Console.WriteLine($"Абонент 2: {ResultOfFilter[int1].DialedNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].DialedNameSubscriber}");
+                Console.WriteLine($"Дата начала звонка: {ResultOfFilter[int1].CallDateStart}");
+                Console.WriteLine($"Дата окончания звонка: {ResultOfFilter[int1].CallDateStop}");
+                Console.WriteLine($"Длительность звонка: {ResultOfFilter[int1].NumberOfSeconds}");
+                Console.WriteLine($"Цена: {ResultOfFilter[int1].Price}");
+                Console.WriteLine($"Стоимость: {ResultOfFilter[int1].Cost}");
+            }
             Console.ReadLine();
         }
-
-
-
-
-
-
-
+        
+        
         public static void FilterCallData(ATE aTE)
         {
             DateTime MinDate;
@@ -495,36 +531,140 @@ namespace ATE
                 return;
             }
 
+            var ResultOfFilter = aTE.Magazine.Where(x => x.CallDateStart >= MinDate && x.CallDateStart <= MaxDate.AddDays(1).AddSeconds(-1)).ToList();
 
-
-
-            var Result = aTE.Magazine.Where(x => x.CallDateStart >= MinDate && x.CallDateStart <= MaxDate.AddDays(1).AddSeconds(-1)).ToList();
-
-            
-            
-
-
-
-
-
-
-            for (int int1 = 0; int1 <= Result.Count - 1; int1++)
+            for (int int1 = 0; int1 <= ResultOfFilter.Count - 1; int1++)
             {
-                Console.WriteLine(Result[int1].MyNumberSubscriber);
-                Console.WriteLine(Result[int1].MyNameSubscriber);
-                Console.WriteLine(Result[int1].DialedNumberSubscriber);
-                Console.WriteLine(Result[int1].DialedNameSubscriber);
-                Console.WriteLine(Result[int1].CallDateStart);
-                Console.WriteLine(Result[int1].CallDateStop);
-                Console.WriteLine(Result[int1].CallDuration);
-                Console.WriteLine(Result[int1].Price);
-                Console.WriteLine(Result[int1].Cost);
+                Console.WriteLine();
+                Console.WriteLine($"Абонент 1: {ResultOfFilter[int1].MyNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].MyNameSubscriber}");
+                Console.WriteLine($"Абонент 2: {ResultOfFilter[int1].DialedNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].DialedNameSubscriber}");
+                Console.WriteLine($"Дата начала звонка: {ResultOfFilter[int1].CallDateStart}");
+                Console.WriteLine($"Дата окончания звонка: {ResultOfFilter[int1].CallDateStop}");
+                Console.WriteLine($"Длительность звонка: {ResultOfFilter[int1].NumberOfSeconds}");
+                Console.WriteLine($"Цена: {ResultOfFilter[int1].Price}");
+                Console.WriteLine($"Стоимость: {ResultOfFilter[int1].Cost}");
+            }
+            Console.ReadLine();
+        }
+
+
+        public static void FilterNumberOfSeconds(ATE aTE)
+        {
+            int Min;
+            int Max;
+
+            Console.WriteLine();
+            Console.WriteLine("Введите минимальное значение длительности звонка:");
+            if (Int32.TryParse(Console.ReadLine(), out Min) == false)
+            {
+                ErrorInfo();
+                return;
             }
 
+            Console.WriteLine();
+            Console.WriteLine("Введите максимальное значение длительности звонка:");
+            if (Int32.TryParse(Console.ReadLine(), out Max) == false)
+            {
+                ErrorInfo();
+                return;
+            }
 
+            var ResultOfFilter = aTE.Magazine.Where(x => x.NumberOfSeconds >= Min && x.NumberOfSeconds <= Max).ToList();
+
+            for (int int1 = 0; int1 <= ResultOfFilter.Count - 1; int1++)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Абонент 1: {ResultOfFilter[int1].MyNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].MyNameSubscriber}");
+                Console.WriteLine($"Абонент 2: {ResultOfFilter[int1].DialedNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].DialedNameSubscriber}");
+                Console.WriteLine($"Дата начала звонка: {ResultOfFilter[int1].CallDateStart}");
+                Console.WriteLine($"Дата окончания звонка: {ResultOfFilter[int1].CallDateStop}");
+                Console.WriteLine($"Длительность звонка: {ResultOfFilter[int1].NumberOfSeconds}");
+                Console.WriteLine($"Цена: {ResultOfFilter[int1].Price}");
+                Console.WriteLine($"Стоимость: {ResultOfFilter[int1].Cost}");
+            }
             Console.ReadLine();
+        }
+        
+        
+        public static void FilterCost(ATE aTE)
+        {
+            double Min;
+            double Max;
 
+            Console.WriteLine();
+            Console.WriteLine("Введите минимальное значение стоимости звонка:");
+            if (double.TryParse(Console.ReadLine(), out Min) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Введите максимальное значение стоимости звонка:");
+            if (double.TryParse(Console.ReadLine(), out Max) == false)
+            {
+                ErrorInfo();
+                return;
+            }
+
+            var ResultOfFilter = aTE.Magazine.Where(x => x.Cost >= Min && x.Cost <= Max).ToList();
+
+            for (int int1 = 0; int1 <= ResultOfFilter.Count - 1; int1++)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"Абонент 1: {ResultOfFilter[int1].MyNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].MyNameSubscriber}");
+                Console.WriteLine($"Абонент 2: {ResultOfFilter[int1].DialedNumberSubscriber}");
+                Console.WriteLine($"Ф.И.О. {ResultOfFilter[int1].DialedNameSubscriber}");
+                Console.WriteLine($"Дата начала звонка: {ResultOfFilter[int1].CallDateStart}");
+                Console.WriteLine($"Дата окончания звонка: {ResultOfFilter[int1].CallDateStop}");
+                Console.WriteLine($"Длительность звонка: {ResultOfFilter[int1].NumberOfSeconds}");
+                Console.WriteLine($"Цена: {ResultOfFilter[int1].Price}");
+                Console.WriteLine($"Стоимость: {ResultOfFilter[int1].Cost}");
+            }
+            Console.ReadLine();
+        }
+
+
+        public static void WriteInFile(ATE aTE)
+        {
+            string Path = @"d:\Automatic telephone exchange";
+
+            if (Directory.Exists(Path) == true) //Если директория существует.
+            {
+                Directory.Delete(Path, true); //Удаляем.
+            }
+
+            Directory.CreateDirectory(Path); //Создаем заново чистую.
+
+            if (aTE.Magazine.Count > 0)
+            {
+                for (int int1 = 0; int1 <= aTE.Magazine.Count - 1; int1++)
+                {
+                    Path = $@"d:\Automatic telephone exchange\Magazine.txt";
+
+                    if (File.Exists(Path) == false) //Если файл не существует.
+                    {
+                        File.AppendAllText(Path, Convert.ToString(aTE.Magazine[int1].MyNumberSubscriber));
+                    }
+                    else
+                    {
+                        File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].MyNumberSubscriber));
+                    }
+                    File.AppendAllText(Path, "\n" + aTE.Magazine[int1].MyNameSubscriber);
+                    File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].DialedNumberSubscriber));
+                    File.AppendAllText(Path, "\n" + aTE.Magazine[int1].DialedNameSubscriber);
+                    File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].CallDateStart));
+                    File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].CallDateStop));
+                    File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].NumberOfSeconds));
+                    File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].Price));
+                    File.AppendAllText(Path, "\n" + Convert.ToString(aTE.Magazine[int1].Cost));
+                }
+            }
         }
     }
-        
 }
